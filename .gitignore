@@ -7,6 +7,9 @@ Makefile
 # Execute file
 rayTraceExecute
 
+# result
+*.ppm
+
 # Others
 .DS_Store
 .vscode
