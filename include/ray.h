@@ -3,6 +3,9 @@
 
 #include "vec3.h"
 
+const double ray_tmin = 0.0;
+const double ray_tmax = 50.0;
+
 class ray 
 {
   public:

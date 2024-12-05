@@ -1,20 +1,12 @@
 #include <iostream>
-#include "vec3.h"
+#include <memory>
+#include "sphere.h"
 #include "color.h"
-#include "ray.h"
 
-bool hit_sphere(const point3& center, double radius, const ray& r) {
-    vec3 oc = center - r.origin();
-    auto a = dot(r.direction(), r.direction());
-    auto b = -2.0 * dot(r.direction(), oc);
-    auto c = dot(oc, oc) - radius*radius;
-    auto discriminant = b*b - 4*a*c;
-    return (discriminant >= 0);
-}
-
-color ray_color(const ray& r) {
-
-    if (hit_sphere(point3(0,0,-1), 0.4, r))
+color ray_color(const ray& r, const std::shared_ptr<hittable> obj) 
+{
+    hit_record rec;
+    if (obj->hit(r, rec) == true)
         return color(1, 0, 0);
 
     vec3 unit_direction = unit_vector(r.direction());
@@ -25,7 +17,6 @@ color ray_color(const ray& r) {
 int main() {
 
     // Image
-
     auto aspect_ratio = 16.0 / 9.0;
     int image_width = 400;
 
@@ -34,7 +25,6 @@ int main() {
     image_height = (image_height < 1) ? 1 : image_height;
 
     // Camera
-
     auto focal_length = 1.0;
     auto viewport_height = 2.0;
     auto viewport_width = viewport_height * (double(image_width)/image_height);
@@ -54,9 +44,7 @@ int main() {
     auto pixel00_loc = viewport_upper_left + 0.5 * (pixel_delta_u + pixel_delta_v);
 
     // Render
-
     std::cout << "P3\n" << image_width << " " << image_height << "\n255\n";
-
     for (int j = 0; j < image_height; j++) {
         std::clog << "\rScanlines remaining: " << (image_height - j) << ' ' << std::flush;
         for (int i = 0; i < image_width; i++) {
@@ -64,10 +52,11 @@ int main() {
             auto ray_direction = pixel_center - camera_center;
             ray r(camera_center, ray_direction);
 
-            color pixel_color = ray_color(r);
+            // sphere* s1 = new sphere(point3(0,0,-10), 2.0);
+            std::shared_ptr<sphere> s1 = std::make_shared<sphere>(point3(0,0,-10), 2.0);
+            color pixel_color = ray_color(r, s1);
             write_color(std::cout, pixel_color);
         }
     }
-
     std::clog << "\rDone.                 \n";
 }
