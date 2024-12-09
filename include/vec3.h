@@ -1,8 +1,7 @@
 #ifndef __VEC3_H__
 #define __VEC3_H__
 
-#include <cmath>
-#include <iostream>
+#include "rtweekend.h"
 
 class vec3 
 {

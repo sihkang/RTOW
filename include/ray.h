@@ -1,10 +1,8 @@
 #ifndef __RAY_H__
 #define __RAY_H__
 
-#include "vec3.h"
+#include "rtweekend.h"
 
-const double ray_tmin = 0.0;
-const double ray_tmax = 50.0;
 
 class ray 
 {
