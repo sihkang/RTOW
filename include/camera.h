@@ -14,9 +14,11 @@ class camera {
 
         std::cout << "P3\n" << image_width << ' ' << image_height << "\n255\n";
 
-        for (int j = 0; j < image_height; j++) {
+        for (int j = 0; j < image_height; j++) 
+        {
             std::clog << "\rScanlines remaining: " << (image_height - j) << ' ' << std::flush;
-            for (int i = 0; i < image_width; i++) {
+            for (int i = 0; i < image_width; i++) 
+            {
                 color pixel_color(0,0,0);
                 for (int sample = 0; sample < samples_per_pixel; sample++) 
                 {
@@ -86,12 +88,13 @@ class camera {
         // Returns the vector to a random point in the [-.5,-.5]-[+.5,+.5] unit square.
         return vec3(random_double() - 0.5, random_double() - 0.5, 0);
     }
-    
+
     color ray_color(const ray& r, const hittable& world) const {
         hit_record rec;
 
         if (world.hit(r, interval(0, infinity), rec)) {
-            return 0.5 * (rec.normal + color(1,1,1));
+            vec3 direction = random_on_hemisphere(rec.normal);
+            return 0.75 * ray_color(ray(rec.p, direction), world);
         }
 
         vec3 unit_direction = unit_vector(r.direction());
